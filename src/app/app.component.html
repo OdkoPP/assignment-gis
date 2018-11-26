@@ -1,0 +1,71 @@
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-sm-3">
+
+      <h3>Starting points</h3>
+      <div class="row" style="margin-bottom: 40px;">
+        <div class="col-xs-4">
+          <label class="checkbox-inline"><input type="checkbox" [(ngModel)]="activeStartingPoints.parking" (change)="startingPointActiveChange()">
+            <div class="fa fa-car" style="color: blue"></div> Parking area
+          </label>
+        </div>
+        <div class="col-xs-4">
+          <label class="checkbox-inline"><input type="checkbox" [(ngModel)]="activeStartingPoints.train" (change)="startingPointActiveChange()">
+            <div class="fa fa-train" style="color: orange"></div> Train stop
+          </label>
+        </div>
+        <div class="col-xs-4">
+          <label class="checkbox-inline"><input type="checkbox" [(ngModel)]="activeStartingPoints.bus" (change)="startingPointActiveChange()">
+            <div class="fa fa-bus" style="color: red"></div> Bus stop
+          </label>
+        </div>
+      </div>
+      
+      <h3>Control</h3>
+      <div class="row" style="margin-bottom: 40px;">
+        <div class="col-xs-12">
+          <button class="btn btn-default" (click)="resetDefault()">Reset view to default state</button>
+        </div>
+      </div>
+
+      <h3 *ngIf="selectedPosition">Selected point GPS</h3>
+      <div *ngIf="selectedPosition" class="row" style="margin-bottom: 40px;">
+        <div class="col-xs-12">
+          Lon - {{ selectedPosition[0] }}<br>
+          Lat - {{ selectedPosition[1] }}
+        </div>
+      </div>
+
+      <h3 *ngIf="routeAnalysis">Route analysis</h3>
+      <div *ngIf="routeAnalysis" class="row" style="margin-bottom: 40px;">
+        <div class="col-xs-12">
+          <table class="table table-hover">
+            <thead>
+              <tr>
+                <th>Type</th>
+                <th>Distance</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let row of routeAnalysis.features">
+                <td>{{ row.properties.type || 'Not defined type' }}</td>
+                <td>{{ (row.properties.distance | number : '1.2-2') + ' m' }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </div>
+    <div class="col-sm-9">
+      <div class="row">
+        <app-map-box 
+          [defaultCounter]="defaultCounter"
+          [activeStartingPointsInput]="activeStartingPoints"
+          (selectedPositionEmitter)="selectedPositionChanged($event)"
+          (routeAnalysisEmitter)="routeAnalysisChanged($event)"
+        ></app-map-box>
+      </div>
+    </div>
+  </div>
+</div>
